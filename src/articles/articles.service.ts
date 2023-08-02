@@ -1,4 +1,30 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { ArticlesEntity } from './articles.entity/articles.entity';
 
 @Injectable()
-export class ArticlesService {}
+export class ArticlesService {
+  constructor(
+    @InjectRepository(ArticlesEntity)
+    private articleRepository: Repository<ArticlesEntity>,
+  ) {}
+  getArticles(): Promise<ArticlesEntity[]> {
+    return this.articleRepository.find();
+  }
+
+  getArticle(id: number): Promise<ArticlesEntity[]> {
+    return this.articleRepository.find({
+      select: ['title', 'content', 'author'],
+      where: [{ id: id }],
+    });
+  }
+
+  saveArticle(article: ArticlesEntity): Promise<ArticlesEntity> {
+    return this.articleRepository.save(article);
+  }
+
+  deleteArticle(id: number) {
+    return this.articleRepository.delete(id);
+  }
+}
