@@ -15,7 +15,8 @@ export class ArticlesController {
   constructor(private readonly articleService: ArticlesService) {}
 
   @Get(':id')
-  getArticleById(@Param() articleId: number) {
+  getArticleById(@Param() params) {
+    const articleId: number = parseInt(params.id);
     return this.articleService.getArticle(articleId);
   }
 
@@ -31,21 +32,21 @@ export class ArticlesController {
 
   @Put(':id')
   updateArticle(
-    @Param() articleId: number,
+    @Param() params,
     @Body()
-    articleContent: {
+    body: {
       title: string;
       content: string;
       author: string;
       creationDate: string;
     },
   ) {
-    const article = { id: articleId, ...articleContent };
-    return this.articleService.saveArticle(article);
+    const article = { id: params.id, ...body };
+    return this.articleService.updateArticle(article, params.id);
   }
 
   @Delete(':id')
-  deleteArticle(@Param() articleId: number) {
-    return this.articleService.deleteArticle(articleId);
+  deleteArticle(@Param() id: number) {
+    return this.articleService.deleteArticle(id);
   }
 }
