@@ -41,7 +41,7 @@ export class ArticlesController {
       creationDate: string;
     },
   ) {
-    const article = { id: params.id, ...body };
+    const article = { id: parseInt(params.id), ...body };
     return this.articleService.updateArticle(article, params.id);
   }
 
